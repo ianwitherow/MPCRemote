@@ -1,0 +1,301 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="MPCRemote" ng-controller="mpcController">
+<head>
+	<title>
+		MPC Remote
+	</title>
+
+	<meta name="viewport" content="target-densitydpi=200, initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="js/getset.js"></script>
+	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.js"></script>
+	<script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/angular.js"></script>
+	<script type="text/javascript" src="js/angular-ui/angular-ui.js"></script>
+	<script type="text/javascript" src="js/angular-ui/ui-bootstrap-0.3.0.js"></script>
+	<script type="text/javascript" src="js/angular-ui/ui-bootstrap-tpls-0.3.0.js"></script>
+	<script type="text/javascript" src="css/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="controllers/controllers.js"></script>
+	<script type="text/javascript" src="filters/filters.js"></script>
+	<script type="text/javascript" src="factories/factories.js"></script>
+
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" href="css/bootstrap/css/slate.css" />
+	<link rel="stylesheet" href="css/bootstrap/css/bootstrap-responsive.css" />
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css" />
+	<link rel="stylesheet" href="js/angular-ui/angular-ui.css" />
+	<link rel="stylesheet" href="css/jquery-ui/jquery-ui-1.10.3.custom.css" />
+	<link rel="stylesheet" href="css/style.dark.css" />
+
+</head>
+<body>
+	<div>
+		<ul class="nav nav-tabs" id="myTab" style="font-size: 12px;">
+		  <li class="active"><a href="#Controls" data-toggle="tab">Controls</a></li>
+		  <li id="BrowseTab"><a href="#Browse" data-toggle="tab">Browse</a></li>
+		  <li><a href="#Favorites" data-toggle="tab">Favorites</a></li>
+		  <li><a href="#Settings" data-toggle="tab">Config</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="Controls" style="text-align: center;margin-top:5px;">
+				<div class="well status">
+					{{Status.fileName}}
+					<span ng-show="Status && !Status.fileName" ng-click="Launch();Msg('Launching MPC');">
+						MPC Not Running
+					</span>
+					<span ng-show="!Status">
+						Connection to Node server failed
+					</span>
+				</div>
+				<ul class="unstyled">
+					<li>
+						<div id="SeekSlider" style="width: 90%;margin:0 auto;"></div>
+						<div style="margin: 15px 0;">
+							<span id="CurrentTime">{{Status.currentTime}}</span> / {{Status.totalTime}}
+						</div>
+					</li>
+					<li class="buttons">
+						<a href ng-click="Command(Commands.PrevFile);Msg('Previous File');">
+							<i class="icon-step-backward"></i>
+						</a>
+						<a href ng-click="PlayPause()">
+							<i ng-class="PlayPauseIcon()"></i>
+						</a>
+						<a href ng-click="Command(Commands.NextFile);Msg('Next File');">
+							<i class="icon-step-forward"></i>
+						</a>
+					</li>
+					<li class="buttons">
+						<a href="" ng-click="Command(Commands.JumpBackMed);Msg('Nudge Back');">
+							<i class="icon-backward"></i>
+						</a>
+						<a href="" ng-click="Command(Commands.JumpFwdMed);Msg('Nudge Forward');">
+							<i class="icon-forward"></i>
+						</a>
+						<a href ng-click="Command(Commands.Fullscreen);Msg('Fullscreen');">
+							<i class="icon-fullscreen"></i>
+						</a>
+					</li>
+					<li>
+						<div class="clearfix volumeControls" style="margin-top:25px;">
+							<div class="pull-right" style="width: 50px;">
+								<a href ng-click="NudgeVolume('up');">
+									<i class="icon-plus-sign"></i>
+								</a>
+							</div>
+							<div class="pull-left">
+								<a href ng-click="NudgeVolume('down');">
+									<i class="icon-minus-sign"></i>
+								</a>
+							</div>
+							<div style="margin:0 50px;">
+								<div id="VolumeSlider" style="position:relative;top:15px;">
+								</div>
+							</div>
+						</div>
+						<span id="CurrentVolume">Volume: {{Status.volume}}</span>%
+					</li>
+				</ul>
+			</div>
+			<div class="tab-pane" id="Browse">
+				<ul class="unstyled inline folders">
+					<li>
+						<a href ng-click="FileClick('/')">
+							Computer
+						</a>
+					</li>
+					<li ng-repeat="folder in FolderList">
+						<a href ng-click="FileClick(folder.path)">
+							{{folder.name}}\
+						</a>
+					</li>
+				</ul>
+				<div id="FilesContainer">
+					<ul class="unstyled files">
+						<li ng-show="CWD != '/'">
+							<a href ng-click="FileClick('..')">
+								<span style="padding-left: 5px;"><i class="icon-level-up"></i> Up a level</span>
+							</a>
+						</li>
+						<li ng-repeat="file in FileList | filter: Filter('top') | orderBy: fileSort" ng-show="!LoadingFileList">
+							<a href ng-click="FileClick(file)">
+								<i ng-class="FileIcon(file)" style="margin-right: 8px;margin-left: 5px;"></i>
+								<span class="fileName">
+									{{file.name}}
+								</span>
+							</a>
+						</li>
+						<li ng-repeat="file in FileList | filter: Filter('bottom') | orderBy: fileSort" ng-show="!LoadingFileList">
+							<a href ng-click="FileClick(file)">
+								<i ng-class="FileIcon(file)" style="margin-right: 8px;margin-left: 5px;"></i>
+								<span class="fileName">
+									{{file.name}}
+								</span>
+							</a>
+						</li>
+						<span ng-show="FileList.length == 0 && !LoadingFileList" style="color: #ccc;margin-left: 5px;">
+							No media found
+						</span>
+						<span ng-show="LoadingFileList" style="color: #ccc;margin-left: 5px;">
+							Loading...
+						</span>
+					</ul>
+				</div>
+			</div>
+			<div class="tab-pane" id="Favorites">
+				<ul class="unstyled files">
+					<li ng-repeat="favorite in FavoritesList">
+					<div class="clearfix">
+						<div class="pull-left">
+							<a href ng-click="FileClick(favorite)" class="pull-left" style="width: auto;">
+								<i class="icon-folder-close" style="margin-right: 8px;margin-left: 5px;"></i>
+								{{favorite.name}}
+							</a>
+						</div>
+						<div class="pull-right">
+							<button href="#FavoriteEditModal" class="btn btn-info pull-right" ng-click="Favorites.Edit(favorite);" data-toggle="modal" style="margin-left: 3px;display:inline;">
+								Edit
+							</button>
+						</div>
+					</div>
+					</li>
+					<div class="alert alert-info" ng-show="FavoritesList.length == 0">
+						<strong>You don't have any favorites!</strong>
+						<br />
+						Click the Favorites button at the bottom to add a folder to your favorites.
+
+					</div>
+				</ul>
+			</div>
+			<div class="tab-pane" id="Settings">
+				<div class="form-horizontal">
+					<label class="control-label">
+						Node Server
+					</label>
+					<div class="controls">
+						<input type="text" ng-model="NodeServer" />
+					</div>
+					<label for="" class="control-label">
+						Node Port
+					</label>
+					<div class="controls">
+						<input type="text" ng-model="NodePort" />
+					</div>
+					<label for="" class="control-label">
+						Window X:
+					</label>
+					<div class="controls">
+						<input type="text" ng-model="WindowX" />
+					</div>
+					<label class="control-label">
+						Window Y:
+					</label>
+					<div class="controls">
+						<input type="text" ng-model="WindowY" />
+					</div>
+					<a href ng-click="Close();Msg('Close MPC');" class="btn btn-danger">Close MPC</a>
+				</div>
+				<div class="form-actions">
+					<a href ng-click="SaveSettings()" class="btn btn-primary">Save</a>
+				</div>
+			</div>
+		</div>
+		<div id="MessageContainer">
+			<span id="Message">
+				Play/Pause
+			</span>
+		</div>
+		<div class="footer" style="display:none;">
+			<ul class="unstyled inline footer-buttons">
+				<li class="pull-left">
+					<button class="btn" ng-click="Favorites.Add()" ng-show="!Favorites.Exists()">
+						<i class="icon-heart"></i> Favorite
+					</button>
+					<button class="btn" ng-click="Favorites.Remove($scope.CWD)" ng-show="Favorites.Exists()">
+						<i class="icon-heart"></i> Unfavorite
+					</button>
+				</li>
+				<li class="pull-left">
+				<div class="form-horizontal">
+					<button class="btn" id="SearchButton" data-expanded="false">
+						<i class="icon-search"></i>
+					</button>
+					<input type="text" ng-model="FileSearch" id="FileSearch" style="display:none;width:0;" />
+				</div>
+				</li>
+				<li class="pull-right" style="width: 142px;" id="RightButtons">
+					<button class="btn" ng-click="ScrollToTop()">
+						<i class="icon-arrow-up"></i>
+						Top
+					</button>
+					<div class="btn-group dropup pull-right">
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-sort"></i> Sort
+						</button>
+						<ul class="dropdown-menu">
+							<li ng-click="FileSort('name')">
+								<a href>
+									File Name Asc
+								</a>
+							</li>
+							<li ng-click="FileSort('-name')">
+								<a href>
+									File Name Desc
+								</a>
+							</li>
+							<li ng-click="FileSort('modified')">
+								<a href>
+									Date Asc
+								</a>
+							</li>
+							<li ng-click="FileSort('-modified')">
+								<a href>
+									Date Desc
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal hide fade" id="FavoriteEditModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Edit Favorite</h3>
+		</div>
+		<div class="modal-body">
+			<div class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label">
+						Path
+					</label>
+					<div class="controls">
+						{{FavoriteEdit.path}}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">
+						Name
+					</label>
+					<div class="controls">
+						<input type="text" ng-model="FavoriteEdit.name" ui-keypress="{13: 'Favorites.Update()'}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-info" data-dismiss="modal">Close</button>
+			<button class="btn btn-danger" data-dismiss="modal" ng-click="Favorites.Remove()"><i class="icon-remove-sign"></i> Delete</button>
+			<button class="btn btn-primary" ng-click="Favorites.Update()"><i class="icon-save"></i> Save</button>
+		</div>
+	</div>
+
+	<div id="Phone"></div>
+	<div id="Desktop"></div>
+
+</body>
+</html>

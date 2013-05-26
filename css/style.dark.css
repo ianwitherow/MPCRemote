@@ -1,0 +1,293 @@
+
+
+html, body
+{
+	height: 100%;
+	overflow: hidden;
+	-ms-content-zooming: none
+}
+
+body
+{
+	min-height: 100%;
+	padding: 0 !important;
+}
+
+a
+{
+	color: #0098be;
+}
+ul li a
+{
+	color: #ddd;
+}
+
+
+a:hover
+{
+	text-decoration: none;
+}
+
+*
+{
+	margin: 0;
+	padding: 0;
+}
+
+#Phone, #Desktop
+{
+	display: none;
+}
+
+.well.status
+{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+
+
+
+.ui-widget-header
+{
+	background: #469c16;
+}
+.ui-widget-content
+{
+	background: #696969;
+}
+.ui-widget-content .ui-state-default
+{
+	background: #8ea5a8;
+}
+
+
+ul.folders > li
+{
+	display: inline-block;
+	background-color: #585858;
+	border: 1px solid #eee;
+	padding: 4px;
+	margin-left: 5px;
+	margin-bottom: 6px;
+	cursor: default;
+}
+ul.folders > li > a
+{
+	display: block;
+}
+#FilesContainer
+{
+	height: 100%;
+	width: auto;
+	overflow: auto;
+}
+
+ul.files
+{
+}
+
+ul.files > li
+{
+	margin: 6px;
+}
+
+.tab-content
+{
+	position:absolute;
+	top:50px;
+	bottom: 35px;
+	width: 100%;
+	overflow-y: auto;
+}
+.footer
+{
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	height: 34px;
+	border-top: 1px solid #ccc;
+}
+
+.btn-group.open .btn.dropdown-toggle
+{
+	background-color: #969696;
+}
+
+.dropdown-menu > li > a
+{
+	color: #d3d3d3;
+}
+
+
+
+#Controls i
+{
+	font-size: 50px;
+}
+
+li.buttons
+{
+	margin: 0 auto;
+	width: 300px;
+}
+
+
+li.buttons > a
+{
+	color: #48a0b1;
+	color: #a9b616;
+	color: #cecece;
+	border-radius: 50%;
+	border: 1px solid #797979;
+	padding: 15px;
+	margin: 5px;
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	background-color: #4b4b4b;
+}
+
+.volumeControls a
+{
+	display: none;
+	color: #979797;
+}
+
+.icon-film.viewed
+{
+	color: #29b63a;
+}
+.icon-film.viewed + .fileName
+{
+	font-weight: 700;
+}
+
+#MessageContainer
+{
+	text-align: center;
+	position:absolute;
+	bottom: 6%;
+	left: 0;
+	right: 0;
+}
+#Message
+{
+	display: none;
+	padding: 5px 10px;
+	background: #333;
+	color: #ddd;
+	border-radius: 3px;
+}
+
+
+
+
+
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 768px)
+{
+	#Phone
+	{
+		display: block;
+	}
+
+	a
+	{
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+
+
+	.well
+	{
+		padding: 8px;
+	}
+	.ui-slider .ui-slider-handle
+	{
+		width: 1.8em;
+		height: 1.8em;
+	}
+	.ui-slider-horizontal .ui-slider-handle
+	{
+		top: -.6em;
+	}
+	.ui-slider
+	{
+		margin: 5px 0 5px 0;
+	}
+	ul.files > li > a
+	{
+		padding: 7px 0 7px 0;
+	}
+	ul.dropdown-menu > li > a
+	{
+		padding: 10px 20px;
+	}
+
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 769px) /* and (max-width: 979px)*/
+{
+	#Desktop
+	{
+		display: block;
+	}
+
+
+
+	#Browse
+	{
+		float: left;
+		display: block;
+		width: 33%;
+	}
+	#BrowseTab
+	{
+		display: none;
+	}
+
+	#Controls
+	{
+		float: right;
+		display: block;
+		width: 66%;
+	}
+	ul.files > li > a
+	{
+		display: block;
+		padding: 3px;
+		border: 1px solid #74a1b8;
+		border-radius: 2px;
+		white-space: normal;
+		overflow:hidden;
+		text-overflow: none;
+	}
+
+
+}
+@media (min-width: 1200px)
+{
+	/*
+	#Browse
+	{
+		width: 25%;
+	}
+	#Controls
+	{
+		width: 75%;
+	}
+	*/
+
+}
+
+.footer-buttons
+{
+	margin-top: 2px;
+	margin-right: 5px;
+	font-size: 1.5em;
+}
+
+
