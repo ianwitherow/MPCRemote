@@ -9,4 +9,4 @@ Installation
 	* mpcUrl: Where Media Player Classic is running. The default port is 13579.
 	* webRoot: Where these files live
 4. Run server\Run Server.bat
-5. Open up the site on a browser and go to the Config tab. Enter in the IP/port that the Node server is running on (mpcRemoteServerPort).
+5. Open up the site in a browser and go to the Config tab. Enter in the IP/port that the Node server is running on (mpcRemoteServerPort).
