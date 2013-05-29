@@ -6,8 +6,12 @@ app.config(['$httpProvider', function($httpProvider)
 	//delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }]);
 
-var sliding = false;
-var browseScroll = 0;
+var sliding = false,
+	browseScroll = 0,
+	updateInterval,
+	slidingValue,
+	seekChanged = false,
+	scope;
 $(function()
 {
 	$("#PlayPause").click(function(e)
@@ -21,73 +25,82 @@ $(function()
 		value:0,
 		range: 'min',
 		orientation: "horizontal",
-		start: function()
+		start: function(event, ui)
 		{
+			scope = angular.element($("#CurrentTime")).scope();
 			sliding = true;
+			updateInterval = setInterval(function()
+			{
+				var time = secondsToTime(slidingValue);
+				scope.setTime(time.toString());
+			}, 500);
 		},
 		stop: function()
 		{
 			sliding = false;
+			if (updateInterval)
+				clearInterval(updateInterval);
 		},
 		change: function(event, ui) {
 			if (sliding)
 				return;
 			if (event.button == 0)
 			{
-				var el = $('#CurrentTime');
-				var scope = angular.element(el[0]).scope();
 				scope.$apply(function()
 				{
 					var time = secondsToTime(ui.value);
-					scope.Status.currentTime = time.h + ':' + time.m + ':' + time.s;
+					scope.Status.currentTime = time.toString();
 					scope.setTime(scope.Status.currentTime);
 				});
 			}
 		},
 		slide: function(event, ui)
 		{
-			var el = $('#CurrentTime');
-			var scope = angular.element(el[0]).scope();
+			$(ui.handle).css("left", 5);
 			var time = secondsToTime(ui.value);
+			seekChanged = (slidingValue != ui.value);
+			slidingValue = ui.value;
 			scope.$apply(function()
 			{
-				scope.Status.currentTime = time.h + ':' + time.m + ':' + time.s;
+				scope.Status.currentTime = time.toString();
 			});
 		}
 	});
-
 	$('#VolumeSlider').slider({
 		min:0,
 		max:100,
 		value:50,
 		range: 'min',
 		orientation: "horizontal",
-		start: function()
+		start: function(event, ui)
 		{
+			scope = angular.element($("#CurrentTime")).scope();
 			sliding = true;
+			updateInterval = setInterval(function()
+			{
+				scope.setVolume(slidingValue);
+			}, 500);
 		},
 		stop: function()
 		{
 			sliding = false;
+			if (updateInterval)
+				clearInterval(updateInterval);
 		},
 		change: function(event, ui) {
 			if (sliding)
 				return;
 			if (event.button == 0)
 			{
-				var el = $('#CurrentTime');
-				var scope = angular.element(el[0]).scope();
 				scope.$apply(function()
 				{
-					var time = secondsToTime(ui.value);
 					scope.setVolume(ui.value);
 				});
 			}
 		},
 		slide: function(event, ui)
 		{
-			var el = $('#CurrentVolume');
-			var scope = angular.element(el[0]).scope();
+			slidingValue = ui.value;
 			scope.$apply(function()
 			{
 				scope.Status.volume = ui.value;
@@ -212,7 +225,11 @@ function secondsToTime(secs)
 	var obj = {
 		"h": hours,
 		"m": minutes,
-		"s": seconds
+		"s": seconds,
+		toString: function()
+		{
+			return this.h + ':' + this.m + ':' + this.s;
+		}
 	};
 	return obj;
 }
@@ -258,16 +275,6 @@ function touchHandler(event)
 		first.target.dispatchEvent(simulatedEvent);
 		event.preventDefault();
 	}
-}
-function OkayToTouch(elem)
-{
-	var okayToTouch = ["Video", "tab", "boxlink", "button"];
-	for (var i = 0; i < okayToTouch.length; i++)
-	{
-		if ($(elem).hasClass(okayToTouch[i]) || $(elem).attr('id') == okayToTouch[i])
-		return true;
-	}
-	return false;
 }
 function init()
 {

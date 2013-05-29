@@ -182,6 +182,17 @@ li.buttons > a
 }
 
 
+#VidFrmControls li
+{
+	margin-top: 8px;
+	width: 100%;
+}
+#VidFrmControls li a, #VidFrmControls li div.btn-group, #VidFrmControls li button
+{
+	display:block;
+	width: 100%;
+}
+
 
 
 

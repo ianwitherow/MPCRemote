@@ -79,15 +79,15 @@
 						</a>
 					</li>
 					<li>
-						<div class="clearfix volumeControls" style="margin-top:25px;">
+						<div class="clearfix volumeControls" style="margin-top:25px;z-index:0;">
+							<div class="pull-left" style="z-index: 1;width:50px;">
+								<a href ng-click="NudgeVolume('down');">
+									<i class="icon-minus-sign" style="z-index:2;"></i>
+								</a>
+							</div>
 							<div class="pull-right" style="width: 50px;">
 								<a href ng-click="NudgeVolume('up');">
 									<i class="icon-plus-sign"></i>
-								</a>
-							</div>
-							<div class="pull-left">
-								<a href ng-click="NudgeVolume('down');">
-									<i class="icon-minus-sign"></i>
 								</a>
 							</div>
 							<div style="margin:0 50px;">
@@ -183,19 +183,67 @@
 					<div class="controls">
 						<input type="text" ng-model="NodePort" />
 					</div>
-					<label for="" class="control-label">
-						Window X:
-					</label>
-					<div class="controls">
-						<input type="text" ng-model="WindowX" />
-					</div>
-					<label class="control-label">
-						Window Y:
-					</label>
-					<div class="controls">
-						<input type="text" ng-model="WindowY" />
-					</div>
-					<a href ng-click="Close();Msg('Close MPC');" class="btn btn-danger">Close MPC</a>
+					<ul class="inline unstyled" id="VidFrmControls">
+						<li>
+							<a href ng-click="ChangeScreen()" class="btn" ng-show="Screens.length > 1">Change Screen</a>
+						</li>
+						<li>
+							<div class="btn-group dropdown">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+									Video Frame
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a href ng-click="Command(Commands.VidFrmStretch);Msg('Stretch to Window');">
+											Stretch
+										</a>
+									</li>
+									<li>
+										<a href ng-click="Command(Commands.VidFrmInside);Msg('Touch from Inside');">
+											Inside
+										</a>
+									</li>
+									<li>
+										<a href ng-click="Command(Commands.VidFrmOutside);Msg('Touch from Outside');">
+											Outside
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<div class="btn-group dropdown">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+									Subtitles
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a href ng-click="Command(Commands.ToggleSubtitles);Msg('Toggle Subtitles');">
+											On/Off
+										</a>
+									</li>
+									<li>
+										<a href ng-click="Command(Commands.NextSubtitle)Msg('Next Subtitle');">
+											Next
+										</a>
+									</li>
+									<li>
+										<a href ng-click="Command(Commands.PrevSubtitle)Msg('Previous Subtitle');;">
+											Previous
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href ng-click="GetBounds()" class="btn" ng-show="Screens.length > 1">Update Screen Config</a>
+						</li>
+						<li>
+							<a href ng-click="Close();Msg('Close MPC');" class="btn btn-danger">Close MPC</a>
+						</li>
+					</ul>
 				</div>
 				<div class="form-actions">
 					<a href ng-click="SaveSettings()" class="btn btn-primary">Save</a>

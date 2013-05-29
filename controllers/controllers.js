@@ -1,6 +1,9 @@
 app.controller('mpcController', function($scope, MpcFactory)
 {
 	$scope.FileSearch = '';
+	$scope.FileList = [];
+	$scope.Screens = [];
+	$scope.Screen = 0;
 	$scope.NodeServer = getItem('NodeServer') || '192.168.1.xxx';
 	$scope.NodePort = getItem('NodePort') || '8000';
 	$scope.FavoritesList = (getItem('Favorites')) ? JSON.parse(getItem('Favorites')) : [];
@@ -10,8 +13,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 	$scope.LoadingFileList = true;
 	$scope.FavoriteEdit = {};
 	$scope.Opened = (getItem('Opened')) ? JSON.parse(getItem('Opened')) : [];
-	$scope.WindowX = getItem('WindowX') || 500;
-	$scope.WindowY = getItem('WindowY') || 250;
 	$scope.Commands = 
 	{
 		Play: 887,
@@ -33,6 +34,10 @@ app.controller('mpcController', function($scope, MpcFactory)
 		NextSubtitle: 953,
 		PrevSubtitle: 954,
 		ToggleSubtitle: 955,
+		VidFrmNormal: 836,
+		VidFrmStretch: 838,
+		VidFrmInside: 839,
+		VidFrmOutside: 840,
 		Launch: 'Launch'
 	}
 	$scope.Command = function(command)
@@ -42,21 +47,41 @@ app.controller('mpcController', function($scope, MpcFactory)
 
 	$scope.Launch = function()
 	{
-		MpcFactory.Launch($scope.WindowX, $scope.WindowY);
+		MpcFactory.Launch();
 	}
 	$scope.Close = function()
 	{
 		MpcFactory.Close();
 	}
 
+	$scope.GetBounds = function()
+	{
+		var promise = MpcFactory.GetBounds();
+		promise.then(function(bounds)
+		{
+			$scope.Screens = bounds.data.split(',');
+		});
+	}
+	$scope.ChangeScreen = function()
+	{
+		if ($scope.Screen == 0)
+			$scope.Screen = 1;
+		else
+			$scope.Screen = 0;
+		MpcFactory.ChangeScreen($scope.Screens[$scope.Screen]);
+	}
+
 	$scope.SaveSettings = function()
 	{
-		setItem('WindowX', $scope.WindowX);
-		setItem('WindowY', $scope.WindowY);
 
 		setItem('NodeServer', $scope.NodeServer);
 		setItem('NodePort', $scope.NodePort);
 		server = $scope.NodeServer + ':' + $scope.NodePort;
+		if ($scope.FileList.length == 0)
+		{
+			$scope.GetFileList();
+		}
+
 	}
 
 
@@ -80,12 +105,9 @@ app.controller('mpcController', function($scope, MpcFactory)
 	$scope.GetFileList = function()
 	{
 		$scope.LoadingFileList = true;
-		//if ($scope.CWD[$scope.CWD.length - 1] != '\\' && $scope.CWD.length > 1)
-			//$scope.CWD += '\\';
 		setItem('LastCWD', $scope.CWD);
 
 		var promise = MpcFactory.browser.GetContents($scope.CWD, $scope.FileTypes);
-		console.log(promise);
 		promise.then(function(contents)
 		{
 			$scope.FileList = contents;
@@ -166,7 +188,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 			$("#VolumeSlider").slider({value: status.volume});
 			if (!$scope.Opened.contains(status.filePath) && status.status != 'N/A')
 			{
-				console.log("Addin that");
 				$scope.Opened.push(status.filePath);
 				setItem('Opened', JSON.stringify($scope.Opened));
 			}
@@ -189,8 +210,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 				if ($scope.CWD.indexOf('\\') > -1)
 				{
 					$scope.CWD = $scope.CWD.substring(0, $scope.CWD.lastIndexOf('\\'));
-					//if ($scope.CWD[$scope.CWD.length - 1] != '\\' && $scope.CWD.length > 1)
-						//$scope.CWD += '\\';
 				} else
 				{
 					$scope.CWD = '/';
@@ -207,9 +226,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 						$("a[href='#Controls']").click();
 				}
 
-				//make sure has \
-				//if (path[path.length - 1] != '\\' && path.length > 1)
-					//path += '\\';
 				$scope.CWD = path;
 				$scope.GetFileList();
 			}
@@ -218,8 +234,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 		{
 			if (file.type == 'file')
 			{
-				//if ($scope.CWD[$scope.CWD.length - 1] != '\\' && $scope.CWD.length > 1)
-					//$scope.CWD += '\\';
 				browseScroll = $(".tab-content").scrollTop();
 				var filepath = $scope.CWD + '\\' + file.name;
 				$scope.Status.fileName = file.name;
@@ -259,12 +273,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 			}
 
 			return 'icon-film';
-			//TODO: Use extension specific icons
-			/*
-			switch (file.ext)
-			{
-				case 'mp4':
-			}*/
 		}
 	}
 	$scope.FileSort = function(sort)
@@ -421,11 +429,6 @@ app.controller('mpcController', function($scope, MpcFactory)
 		browseScroll = 0;
 	}
 
-
-
-
-
-
 	$scope.Log = function(msg)
 	{
 		console.log(msg);
@@ -434,6 +437,7 @@ app.controller('mpcController', function($scope, MpcFactory)
 
 	//TODO: only do this on non-phone devices
 	$scope.GetFileList();
+	$scope.GetBounds();
 
 });
 

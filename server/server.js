@@ -1,4 +1,5 @@
 /* Settings */
+var debug = true;
 
 /* Dependencies */
 var querystring = require('querystring');
@@ -41,7 +42,7 @@ var mpcServer = http.Server(function(req, res)
 			var url_parts = url.parse(req.url, true);
 			var query = url_parts.query;
 			if (query.Command != 'Status')
-				console.log(query);
+				if(debug) console.log(query);
 			switch (query.Command)
 			{
 				case 'Status':
@@ -69,16 +70,24 @@ var mpcServer = http.Server(function(req, res)
 					res.end();
 					break;
 				case 'Launch':
-					exec('"C:\\Program Files\\MPC-HC\\mpc-hc64.exe"');
-					setTimeout(function()
-					{
-						exec("MoveWindow.exe " + query.x + " " + query.y);
-					}, 500);
+					exec('"' + settings.mpcPath + '"');
 					res.end();
 					break;
 				case 'Close':
 					exec("MoveWindow.exe close");
 					res.end();
+					break;
+				case 'Bounds':
+					exec("MoveWindow.exe bounds", function(error, stdout, stderr)
+					{
+						var bounds = stdout;
+						res.end(bounds);
+					});
+					break;
+				case 'Move':
+					exec("MoveWindow.exe " + query.x + ' ' + query.y);
+					res.end();
+					break;
 				default:
 					mpc.player.sendCommand(query.Command);
 					res.end();
@@ -126,12 +135,12 @@ var webServer = http.Server(function(req, res)
 					contentType = 'text/html';
 					break;
 			}
-			console.log('Sending file as ' + contentType + ': ' + fileName);
+			if(debug) console.log('Sending file as ' + contentType + ': ' + fileName);
 			res.writeHead('200', {'content-type': contentType});
 			res.end(data);
 		}else
 		{
-			console.log('Requested file not found: ' + webRoot + fileName);
+			if(debug) console.log('Requested file not found: ' + webRoot + fileName);
 			res.writeHead('404');
 			res.end("404 - File not found.");
 		}
@@ -295,7 +304,7 @@ function SendRequest(url, callback)
 	} catch(ex)
 	{
 		//MPC isn't running
-		console.log(ex);
+		if(debug) console.log(ex);
 	}
 }
 

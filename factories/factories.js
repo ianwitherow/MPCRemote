@@ -21,13 +21,26 @@ app.factory('MpcFactory', function($http)
 	}
 	mpcFactory.Launch = function(x, y)
 	{
-		return $http.get('http://' + server + '/command?Command=Launch&x=' + x + '&y=' + y + rand());
+		return $http.get('http://' + server + '/command?Command=Launch' + rand());
 	}
 	mpcFactory.Close = function()
 	{
 		return $http.get('http://' + server + '/command?Command=Close' + rand());
 	}
 
+
+	mpcFactory.GetBounds = function()
+	{
+		return $http.get('http://' + server + '/command?Command=Bounds' + rand(), function(response)
+		{
+			var bounds = response.data;
+			return bounds;
+		});
+	}
+	mpcFactory.ChangeScreen = function(x)
+	{
+		return $http.get('http://' + server + '/command?Command=Move&x=' + x + '&y=250' + rand());
+	}
 
 
 	mpcFactory.controls = 
@@ -67,14 +80,12 @@ app.factory('MpcFactory', function($http)
 			waitForIt = true;
 			return $http.get('http://' + server + '/command?Command=GoTo&position=' + time + rand()).success(function()
 			{
-				console.log("Success");
 			}).then(function(response)
 			{
 				waitForIt = false;
 			    var results = response.data;
 				return results;
 			});
-			console.log("Skipping to " + time);
 		},
 		Volume:
 		{
