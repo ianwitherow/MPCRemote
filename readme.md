@@ -1,7 +1,7 @@
 Installation
 ============
 
-###### Note: this project currently requires Node.js to be installed
+###### Note: this project currently requires [Node.js](http://nodejs.org) to be installed
 
 1. Clone the repo
 2. Enable the Web Interface in Media Player Classic. View > Options > Web Interface
