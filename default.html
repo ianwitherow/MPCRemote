@@ -5,7 +5,9 @@
 		MPC Remote
 	</title>
 
-	<meta name="viewport" content="target-densitydpi=200, initial-scale=1.0, user-scalable=no" />
+	<!--<meta name="viewport" content="height=device-height, target-densitydpi=200, initial-scale=1.0, user-scalable=no" />-->
+	<meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,user-scalable=no" />
+
 	<script type="text/javascript" src="js/getset.js"></script>
 	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.js"></script>
@@ -20,7 +22,7 @@
 	<script type="text/javascript" src="filters/filters.js"></script>
 	<script type="text/javascript" src="factories/factories.js"></script>
 
-	<link rel="stylesheet" href="css/style.css" />
+	<!--<link rel="stylesheet" href="css/style.css" />-->
 	<link rel="stylesheet" href="css/bootstrap/css/bootstrap.css" />
 	<link rel="stylesheet" href="css/bootstrap/css/slate.css" />
 	<link rel="stylesheet" href="css/bootstrap/css/bootstrap-responsive.css" />
@@ -31,6 +33,9 @@
 
 </head>
 <body>
+<div id="thing" style="display:none;">
+	SUP
+</div>
 	<div>
 		<ul class="nav nav-tabs" id="myTab" style="font-size: 12px;">
 		  <li class="active"><a href="#Controls" data-toggle="tab">Controls</a></li>
@@ -49,35 +54,37 @@
 						Connection to Node server failed
 					</span>
 				</div>
-				<ul class="unstyled">
+				<ul class="unstyled clearfix">
 					<li>
 						<div id="SeekSlider" style="width: 90%;margin:0 auto;"></div>
-						<div style="margin: 15px 0;">
+						<div style="" id="Status">
 							<span id="CurrentTime">{{Status.currentTime}}</span> / {{Status.totalTime}}
 						</div>
 					</li>
-					<li class="buttons">
-						<a href ng-click="Command(Commands.PrevFile);Msg('Previous File');">
-							<i class="icon-step-backward"></i>
-						</a>
-						<a href ng-click="PlayPause()">
-							<i ng-class="PlayPauseIcon()"></i>
-						</a>
-						<a href ng-click="Command(Commands.NextFile);Msg('Next File');">
-							<i class="icon-step-forward"></i>
-						</a>
-					</li>
-					<li class="buttons">
-						<a href="" ng-click="Command(Commands.JumpBackMed);Msg('Nudge Back');">
-							<i class="icon-backward"></i>
-						</a>
-						<a href="" ng-click="Command(Commands.JumpFwdMed);Msg('Nudge Forward');">
-							<i class="icon-forward"></i>
-						</a>
-						<a href ng-click="Command(Commands.Fullscreen);Msg('Fullscreen');">
-							<i class="icon-fullscreen"></i>
-						</a>
-					</li>
+					<div class="clearfix">
+						<li class="buttons">
+							<a href ng-click="Command(Commands.PrevFile);Msg('Previous File');">
+								<i class="icon-step-backward"></i>
+							</a>
+							<a href ng-click="PlayPause()">
+								<i ng-class="PlayPauseIcon()"></i>
+							</a>
+							<a href ng-click="Command(Commands.NextFile);Msg('Next File');">
+								<i class="icon-step-forward"></i>
+							</a>
+						</li>
+						<li class="buttons">
+							<a href="" ng-click="Command(Commands.JumpBackMed);Msg('Nudge Back');">
+								<i class="icon-backward"></i>
+							</a>
+							<a href="" ng-click="Command(Commands.JumpFwdMed);Msg('Nudge Forward');">
+								<i class="icon-forward"></i>
+							</a>
+							<a href ng-click="Command(Commands.Fullscreen);Msg('Fullscreen');">
+								<i class="icon-fullscreen"></i>
+							</a>
+						</li>
+					</div>
 					<li>
 						<div class="clearfix volumeControls" style="margin-top:25px;z-index:0;">
 							<div class="pull-left" style="z-index: 1;width:50px;">
@@ -225,12 +232,12 @@
 										</a>
 									</li>
 									<li>
-										<a href ng-click="Command(Commands.NextSubtitle)Msg('Next Subtitle');">
+										<a href ng-click="Command(Commands.NextSubtitle);Msg('Next Subtitle');">
 											Next
 										</a>
 									</li>
 									<li>
-										<a href ng-click="Command(Commands.PrevSubtitle)Msg('Previous Subtitle');;">
+										<a href ng-click="Command(Commands.PrevSubtitle);Msg('Previous Subtitle');;">
 											Previous
 										</a>
 									</li>

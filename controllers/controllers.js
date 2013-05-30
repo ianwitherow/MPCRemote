@@ -235,6 +235,7 @@ app.controller('mpcController', function($scope, MpcFactory)
 			if (file.type == 'file')
 			{
 				browseScroll = $(".tab-content").scrollTop();
+				tabletBrowseScroll = $("#Browse").scrollTop();
 				var filepath = $scope.CWD + '\\' + file.name;
 				$scope.Status.fileName = file.name;
 				$scope.OpenFile(filepath)
@@ -280,6 +281,7 @@ app.controller('mpcController', function($scope, MpcFactory)
 		//TODO: call GetFileList with sort parameter to sort on the server
 		$scope.fileSort = sort;
 		$(".tab-content").scrollTop(0);
+		$("#Browse").scrollTop(0);
 	}
 
 	$scope.PlayPauseIcon = function()
@@ -426,7 +428,9 @@ app.controller('mpcController', function($scope, MpcFactory)
 	$scope.ScrollToTop = function()
 	{
 		$(".tab-content").scrollTop(0, 0);
+		$("#Browse").scrollTop(0, 0);
 		browseScroll = 0;
+		tabletBrowseScroll = 0;
 	}
 
 	$scope.Log = function(msg)

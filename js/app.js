@@ -8,6 +8,7 @@ app.config(['$httpProvider', function($httpProvider)
 
 var sliding = false,
 	browseScroll = 0,
+	tabletBrowseScroll = 0,
 	updateInterval,
 	slidingValue,
 	seekChanged = false,
@@ -123,30 +124,19 @@ $(function()
 		if ($(".tab-pane:visible").attr('id') == 'Browse')
 		{
 			browseScroll = $(".tab-content").scrollTop();
+			tabletBrowseScroll = $("#Browse").scrollTop();
 		}
 	});
 
 
 	$("a[data-toggle='tab']").on('shown', function(e)
 	{
-		if ($("#Desktop").is(":visible"))
-		{
-			if ($(e.target).attr('href') == '#Favorites')
-			{
-				$("#Browse,#Controls").hide();
-			} else if($(e.target).attr('href') == '#Controls')
-			{
-				$("#Browse,#Controls").show();
-			}
-		} else
-		{
-			$(".tab-pane").hide();
-		}
 		if ($(e.target).attr('href') == '#Browse')
 		{
 			setTimeout(function()
 			{
 				$(".tab-content").scrollTop(browseScroll, 0);
+				$("#Browse").scrollTop(tabletBrowseScroll, 0);
 			}, 1);
 		}
 

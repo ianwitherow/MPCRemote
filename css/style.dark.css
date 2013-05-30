@@ -88,10 +88,20 @@ ul.files
 {
 }
 
-ul.files > li
-{
-	margin: 6px;
-}
+	ul.files > li
+	{
+		margin: 6px;
+	}
+		ul.files > li > a
+		{
+			display: block;
+			padding: 3px;
+			border: 1px solid #74a1b8;
+			border-radius: 2px;
+			white-space: normal;
+			overflow:hidden;
+			text-overflow: none;
+		}
 
 .tab-content
 {
@@ -180,22 +190,10 @@ li.buttons > a
 	color: #ddd;
 	border-radius: 3px;
 }
-
-
-#VidFrmControls li
+#Status
 {
-	margin-top: 8px;
-	width: 100%;
+	margin: 15px 0;
 }
-#VidFrmControls li a, #VidFrmControls li div.btn-group, #VidFrmControls li button
-{
-	display:block;
-	width: 100%;
-}
-
-
-
-
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 768px)
@@ -208,6 +206,12 @@ li.buttons > a
 	a
 	{
 		-webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+
+	body
+	{
+		min-height: auto;
+		padding: 0 !important;
 	}
 
 
@@ -237,6 +241,17 @@ li.buttons > a
 		padding: 10px 20px;
 	}
 
+	#VidFrmControls li
+	{
+		margin-top: 8px;
+		width: 100%;
+	}
+	#VidFrmControls li a, #VidFrmControls li div.btn-group, #VidFrmControls li button
+	{
+		display:block;
+		width: 100%;
+	}
+
 }
 
 /* Portrait tablet to landscape and desktop */
@@ -247,13 +262,36 @@ li.buttons > a
 		display: block;
 	}
 
+	#VidFrmControls li
+	{
+		margin-top: 10px;
+	}
 
 
-	#Browse
+	/*.nav-tabs < li.active a[href='#Controls'] + .tab-content div#Controls*/
+	.tab-pane.active#Controls
+	{
+		float: right;
+		display: block;
+		width: 66%;
+	}
+	.tab-pane.active#Controls + #Browse
 	{
 		float: left;
 		display: block;
 		width: 33%;
+		max-height: 100%;
+		overflow-y: auto;
+	}
+	.tab-pane.active#Controls + #Browse::-webkit-scrollbar
+	{
+		display: none;
+	}
+
+
+	/*
+	#Browse
+	{
 	}
 	#BrowseTab
 	{
@@ -262,23 +300,54 @@ li.buttons > a
 
 	#Controls
 	{
-		float: right;
-		display: block;
-		width: 66%;
 	}
-	ul.files > li > a
-	{
-		display: block;
-		padding: 3px;
-		border: 1px solid #74a1b8;
-		border-radius: 2px;
-		white-space: normal;
-		overflow:hidden;
-		text-overflow: none;
-	}
+	*/
+
 
 
 }
+
+@media (max-height: 510px)
+{
+
+	li.buttons:first-child
+	{
+		margin-right: 15px;
+		float: left;
+	}
+
+	li.buttons:last-child
+	{
+		margin-left: 15px;
+		float:right;
+	}
+
+	#Controls i
+	{
+		font-size: 23px;
+	}
+
+	li.buttons > a
+	{
+		width: 25px;
+		height: 25px;
+		padding: 8px 6px 5px 6px;
+		margin: 5px;
+	}
+	#VolumeSlider
+	{
+		top: 0px !important;
+	}
+
+	#Status
+	{
+		margin: 5px 0 0 0;
+	}
+
+
+
+}
+
 @media (min-width: 1200px)
 {
 	/*
