@@ -106,7 +106,7 @@ app.controller('mpcController', function($scope, MpcFactory)
 		$scope.LoadingFileList = true;
 		setItem('LastCWD', $scope.CWD);
 
-		var promise = MpcFactory.browser.GetContents($scope.CWD, $scope.FileTypes);
+		var promise = MpcFactory.browser.GetContents(escape($scope.CWD), $scope.FileTypes);
 		promise.then(function(contents)
 		{
 			$scope.FileList = contents;
