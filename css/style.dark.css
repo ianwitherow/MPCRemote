@@ -241,16 +241,21 @@ li.buttons > a
 		padding: 10px 20px;
 	}
 
-	#VidFrmControls li
+	#SettingsButtons li
 	{
 		margin-top: 8px;
 		width: 100%;
 	}
-	#VidFrmControls li a, #VidFrmControls li div.btn-group, #VidFrmControls li button
+	#SettingsButtons li a, #SettingsButtons li div.btn-group, #SettingsButtons li button
 	{
 		display:block;
 		width: 100%;
 	}
+	#FileTypeList
+	{
+		max-height: 300px;
+	}
+
 
 }
 
@@ -262,10 +267,11 @@ li.buttons > a
 		display: block;
 	}
 
-	#VidFrmControls li
+	#SettingsButtons li
 	{
 		margin-top: 10px;
 	}
+	
 
 
 	/*.nav-tabs < li.active a[href='#Controls'] + .tab-content div#Controls*/
@@ -344,6 +350,10 @@ li.buttons > a
 		margin: 5px 0 0 0;
 	}
 
+	#FileTypeList
+	{
+		max-height: 130px;
+	}
 
 
 }

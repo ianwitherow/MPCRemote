@@ -8,8 +8,7 @@ app.controller('mpcController', function($scope, MpcFactory)
 	$scope.NodePort = getItem('NodePort') || '8000';
 	$scope.FavoritesList = (getItem('Favorites')) ? JSON.parse(getItem('Favorites')) : [];
 	$scope.CWD = getItem('LastCWD') || "/";
-	$scope.FileTypes = ['mkv', 'avi', 'mp4'];
-	$scope.test="Test";
+	$scope.FileTypes = (getItem('FileTypes')) ? JSON.parse(getItem('FileTypes')) : ['mkv', 'avi', 'mp4', 'mp3'];
 	$scope.LoadingFileList = true;
 	$scope.FavoriteEdit = {};
 	$scope.Opened = (getItem('Opened')) ? JSON.parse(getItem('Opened')) : [];
@@ -423,6 +422,19 @@ app.controller('mpcController', function($scope, MpcFactory)
 	{
 		$scope.Favorites = [];
 		setItem('Favorites', '');
+	}
+	$scope.RemoveType = function(type)
+	{
+		$scope.FileTypes.splice($scope.FileTypes.indexOf(type), 1);
+		setItem('FileTypes', JSON.stringify($scope.FileTypes));
+		$scope.GetFileList();
+	}
+	$scope.AddType = function()
+	{
+		$scope.FileTypes.push($scope.NewType.replace(/\./g, ''));
+		setItem('FileTypes', JSON.stringify($scope.FileTypes));
+		$scope.NewType = '';
+		$scope.GetFileList();
 	}
 
 	$scope.ScrollToTop = function()

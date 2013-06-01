@@ -3,5 +3,5 @@
     "mpcRemoteServerPort": 8000,
     "mpcUrl": "http://localhost:13579",
 	"mpcPath": "C:\\Program Files (x86)\\MPC-HC\\mpc-hc.exe",
-    "webRoot": "C:\\Users\\ian.witherow\\Documents\\My SugarSync\\MPCRemote"
+	"webRoot": "C:\\Users\\Dave\\Documents\\My SugarSync\\MPCRemote"
 }
