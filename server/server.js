@@ -157,14 +157,30 @@ mpcServer.on('listening', function()
 });
 
 webServer.listen(webServerPort);
+webServer.on('error', function(e) { serverError(e, webServerPort) });
 
 mpcServer.listen(mpcRemoteServerPort);
+mpcServer.on('error', function(e) { serverError(e, mpcRemoteServerPort) });
+
+
+function serverError(e, port)
+{
+	if (e.code == 'EADDRINUSE')
+		console.log('Failed to start server. Port ' + port + ' is already in use.');
+		setTimeout(function()
+		{
+			//Give user time to read message
+		}, 5000);
+
+}
+
+
 
 
 function OnStatus(FileName, Status, CurrentFrame, CurrentTime, TotalFrames, TotalTime, Muted, Volume, FilePath)
 {
 	var status = {
-		fileName: FileName,
+		fileName: FileName.replace(/\\/g, ''),
 		status: Status,
 		currentFrame: CurrentFrame,
 		currentTime: CurrentTime,
