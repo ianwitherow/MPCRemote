@@ -198,7 +198,8 @@ var mpc = {};
 mpc.player = {
 	open: function(filePath)
 	{
-		SendRequest(mpcUrl + '/browser.html?path=' + filePath.unescape());
+		SendRequest(mpcUrl + '/browser.html?path=' + escape(filePath));
+		console.log(mpcUrl + '/browser.html?path=' + escape(filePath));
 	},
 	sendCommand: function(command)
 	{
@@ -236,6 +237,7 @@ browser.getList = function(dir, types, callback)
 {
 	//TODO: Accept sort and do sorting
 	//Add more metadata to returned list so we can see file size, date modified, maybe even duration
+	dir = unescape(dir);
 	if (dir == '/')
 	{
 		callback(DriveLetters());

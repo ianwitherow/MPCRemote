@@ -131,7 +131,7 @@ app.factory('MpcFactory', function($http)
 		OpenFile: function(filePath)
 		{
 			waitForIt = true;
-			return $http.get('http://' + server + '/command?Command=Open&FilePath=' + filePath.replace(/\\/g, '\\\\') + rand()).then(function(r)
+			return $http.get('http://' + server + '/command?Command=Open&FilePath=' + escape(filePath) + rand()).then(function(r)
 			{
 				waitForIt = false;
 			});
