@@ -1,5 +1,4 @@
-var server = getItem('NodeServer') + ':' + (getItem('NodePort') || '8000');
-
+var server = location.host;
 var requestRunning = false;
 
 //Variable used to avoid updating the status when we're changing certain things. Helps with the skippy effect: when you hit Pause and it shows the pause icon, then the play icon for a split second, then pause again.

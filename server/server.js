@@ -11,8 +11,6 @@ var path = require('path');
 var exec = require('child_process').exec;
 var settings = require('./settings.json');
 
-var webServerPort = settings.webServerPort; //Port the web server will listen on
-var mpcRemoteServerPort = settings.mpcRemoteServerPort; //Where the web app sends requests
 var mpcUrl = settings.mpcUrl; //Where MPC is listening
 var webRoot = settings.webRoot; //Root directory of website to host. Don't include trailing backslash
 var mpcServer = http.Server(function(req, res)
@@ -39,6 +37,7 @@ var mpcServer = http.Server(function(req, res)
 		res.writeHead(200, headers);
 		if (req.url.indexOf('/command') == 0)
 		{
+			//Handle commands from web app
 			var url_parts = url.parse(req.url, true);
 			var query = url_parts.query;
 			if (query.Command != 'Status')
@@ -95,72 +94,63 @@ var mpcServer = http.Server(function(req, res)
 			}
 		} else
 		{
-			res.end();
+			//Normal web server stuff
+			var fileName = (req.url == '/') ? '/default.html' : req.url;
+			if (fileName.indexOf('?') > -1)
+				fileName = fileName.substring(0, fileName.indexOf('?'));
+			var file = fs.readFile(webRoot + fileName, function(error, data)
+			{
+				if(!error)
+				{
+					var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length)
+					var contentType = "";
+					switch (extension)
+					{
+						case 'js':
+							contentType = 'text/javascript';
+							break;
+						case 'css':
+							contentType = 'text/css';
+							break;
+						case 'htm': case 'html':
+							contentType = 'text/html';
+							break;
+						case 'png': case 'gif': case 'jpg': case 'jpeg':
+							contentType = 'image/' + extension;
+							break;
+						case 'ico':
+							contentType = 'image/x-icon';
+							break;
+						case 'woff':
+							contentType = 'font/x-woff';
+							break;
+						default:
+							contentType = 'text/html';
+							break;
+					}
+					if(debug) console.log('Sending file as ' + contentType + ': ' + fileName);
+					res.writeHead('200', {'content-type': contentType});
+					res.end(data);
+				}else
+				{
+					if(debug) console.log('Requested file not found: ' + webRoot + fileName);
+					res.writeHead('404');
+					res.end("404 - File not found.");
+				}
+			});
 		}
 	}
 });
 
-var webServer = http.Server(function(req, res)
-{
-	var fileName = (req.url == '/') ? '/default.html' : req.url;
-	if (fileName.indexOf('?') > -1)
-		fileName = fileName.substring(0, fileName.indexOf('?'));
-	var file = fs.readFile(webRoot + fileName, function(error, data)
-	{
-		if(!error)
-		{
-			var extension = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length)
-			var contentType = "";
-			switch (extension)
-			{
-				case 'js':
-					contentType = 'text/javascript';
-					break;
-				case 'css':
-					contentType = 'text/css';
-					break;
-				case 'htm': case 'html':
-					contentType = 'text/html';
-					break;
-				case 'png': case 'gif': case 'jpg': case 'jpeg':
-					contentType = 'image/' + extension;
-					break;
-				case 'ico':
-					contentType = 'image/x-icon';
-					break;
-				case 'woff':
-					contentType = 'font/x-woff';
-					break;
-				default:
-					contentType = 'text/html';
-					break;
-			}
-			if(debug) console.log('Sending file as ' + contentType + ': ' + fileName);
-			res.writeHead('200', {'content-type': contentType});
-			res.end(data);
-		}else
-		{
-			if(debug) console.log('Requested file not found: ' + webRoot + fileName);
-			res.writeHead('404');
-			res.end("404 - File not found.");
-		}
-	});
-});
 
-webServer.on('listening', function()
-{
-	console.log("Web server listening on port " + webServerPort);
-});
 mpcServer.on('listening', function()
 {
-	console.log("MPC Remote Server listening on port " + mpcRemoteServerPort);
+	console.log("MPC Remote Server listening on port " + settings.serverPort);
 });
 
-webServer.listen(webServerPort);
-webServer.on('error', function(e) { serverError(e, webServerPort) });
+mpcServer.on('error', function(e) { serverError(e, settings.serverPort) });
 
-mpcServer.listen(mpcRemoteServerPort);
-mpcServer.on('error', function(e) { serverError(e, mpcRemoteServerPort) });
+mpcServer.listen(settings.serverPort);
 
 
 function serverError(e, port)
@@ -199,7 +189,6 @@ mpc.player = {
 	open: function(filePath)
 	{
 		SendRequest(mpcUrl + '/browser.html?path=' + escape(filePath));
-		console.log(mpcUrl + '/browser.html?path=' + escape(filePath));
 	},
 	sendCommand: function(command)
 	{
@@ -316,8 +305,6 @@ function SendRequest(url, callback)
 		{
 			//MPC isn't running
 		});
-
-
 
 	} catch(ex)
 	{
