@@ -1,6 +1,6 @@
 {
-    "serverPort": 8081,
+    "serverPort": 8080,
     "mpcUrl": "http://localhost:13579",
 	"mpcPath": "C:\\Program Files\\MPC-HC\\mpc-hc64.exe",
-	"webRoot": "C:\\Users\\Dave\\Documents\\My SugarSync\\MPCRemote"
+	"webRoot": "C:\\Path\\To\\MPCRemote"
 }
