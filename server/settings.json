@@ -1,5 +1,5 @@
 {
     "serverPort": 8081,
-	"mpcPath": "C:\\Program Files\\MPC-HC\\mpc-hc64.exe",
-	"mpcUrl": "http://localhost:13579",
+	"mpcPath": "auto",
+	"mpcUrl": "http://localhost:13579"
 }

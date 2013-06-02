@@ -13,7 +13,32 @@ var settings = require('./settings.json');
 
 var mpcUrl = settings.mpcUrl; //Where MPC is listening
 var webRoot = process.cwd() + '\\..';
-console.log(webRoot);
+
+if (settings.mpcPath == 'auto')
+{
+	var possiblePaths = ["C:\\Program Files\\MPC-HC\\jmpc-hc64.exe", "C:\\Program Files (x86)\\MPC-HC\\jmpc-hc.exe" ];
+	for (var i = 0; i < possiblePaths.length; i++)
+	{
+		checkMpcPath(possiblePaths[i]);
+	}
+}
+function checkMpcPath(path)
+{
+	fs.exists(path, function(exists)
+	{
+		if (exists)
+			settings.mpcPath = path;
+	});
+}
+
+setTimeout(function()
+{
+	if (settings.mpcPath == "auto")
+	{
+		console.log("\n\n**** Error ****\n\nCouldn't autodetect MPC's exe path!\n\nYou should probably put the path in settings.json. Better yet, do that and also report a bug on GitHub with a mention of the actual path so it can be autodetected in the future.\n\n***************");
+	}
+}, 1000);
+
 var mpcServer = http.Server(function(req, res)
 {
 	if (req.method == 'OPTIONS')
