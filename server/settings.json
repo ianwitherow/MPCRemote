@@ -1,5 +1,5 @@
 {
     "serverPort": 8081,
 	"mpcPath": "auto", //Can be "auto" to autodetect, or the actual path if that doesn't work. Make sure to use double backslashes if it's a path.
-	"mpcUrl": "http://localhost:13579"
+	"mpcUrl": "default" //example: http://192.168.1.15:13579   Set to "default" to assume localhost and default port.
 }

@@ -22,6 +22,10 @@ if (settings.mpcPath == 'auto')
 		checkMpcPath(possiblePaths[i]);
 	}
 }
+
+if (settings.mpcUrl == "default")
+	settings.mpcUrl = "http://localhost:13579";
+
 function checkMpcPath(path)
 {
 	fs.exists(path, function(exists)
