@@ -16,7 +16,7 @@ var webRoot = process.cwd() + '\\..';
 
 if (settings.mpcPath == 'auto')
 {
-	var possiblePaths = ["C:\\Program Files\\MPC-HC\\jmpc-hc64.exe", "C:\\Program Files (x86)\\MPC-HC\\jmpc-hc.exe" ];
+	var possiblePaths = ["C:\\Program Files\\MPC-HC\\mpc-hc64.exe", "C:\\Program Files (x86)\\MPC-HC\\mpc-hc.exe" ];
 	for (var i = 0; i < possiblePaths.length; i++)
 	{
 		checkMpcPath(possiblePaths[i]);
