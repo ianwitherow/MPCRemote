@@ -12,7 +12,8 @@ var exec = require('child_process').exec;
 var settings = require('./settings.json');
 
 var mpcUrl = settings.mpcUrl; //Where MPC is listening
-var webRoot = settings.webRoot; //Root directory of website to host. Don't include trailing backslash
+var webRoot = process.cwd() + '\\..';
+console.log(webRoot);
 var mpcServer = http.Server(function(req, res)
 {
 	if (req.method == 'OPTIONS')
