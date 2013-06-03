@@ -11,7 +11,6 @@ var path = require('path');
 var exec = require('child_process').exec;
 var settings = require('./settings.json');
 
-var mpcUrl = settings.mpcUrl; //Where MPC is listening
 var webRoot = process.cwd() + '\\..';
 
 if (settings.mpcPath == 'auto')
@@ -218,15 +217,15 @@ var mpc = {};
 mpc.player = {
 	open: function(filePath)
 	{
-		SendRequest(mpcUrl + '/browser.html?path=' + escape(filePath));
+		SendRequest(settings.mpcUrl + '/browser.html?path=' + escape(filePath));
 	},
 	sendCommand: function(command)
 	{
-		SendRequest(mpcUrl + '/command.html?wm_command=' + command);
+		SendRequest(settings.mpcUrl + '/command.html?wm_command=' + command);
 	},
 	getStatus: function(callback)
 	{
-		SendRequest(mpcUrl + '/status.html', function(error, response, body)
+		SendRequest(settings.mpcUrl + '/status.html', function(error, response, body)
 		{
 			//Escape backslashes
 			if (body)
@@ -243,11 +242,11 @@ mpc.player = {
 	},
 	goTo: function(time)
 	{
-		SendRequest(mpcUrl + '/command.html?wm_command=-1&position=' + time);
+		SendRequest(settings.mpcUrl + '/command.html?wm_command=-1&position=' + time);
 	},
 	setVolume: function(volume)
 	{
-		SendRequest(mpcUrl + '/command.html?wm_command=-2&volume=' + volume);
+		SendRequest(settings.mpcUrl + '/command.html?wm_command=-2&volume=' + volume);
 	}
 
 }
