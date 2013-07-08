@@ -11,5 +11,3 @@ Installation
 	* `mpcUrl`: Where Media Player Classic's Web Interface is listening. Set to "default" to use the default port (13579) on localhost
 4. Launch "server\Run Server.bat" (or run `node server.js`)
 5. Browse to your IP/hostname, using the same port you set for `serverPort`
-
-git commit -m 'Allows mpcUrl to be "default"'
