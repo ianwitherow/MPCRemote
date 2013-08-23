@@ -2,6 +2,7 @@ Features
 ========
 * Responsive UI with support for portrait/landscape phones as well as tablets
 * File browser with the ability to add folders as Favorites
+* Keeps track of files you've watched so you can pick up where you left off
 * Choose which file types you care about
 * Multi-monitor support - Move MPC from one screen to another
 
