@@ -1,9 +1,9 @@
 Features
 ========
-*Responsive UI with support for portrait/landscape phones as well as tablets
-*File browser with the ability to add folders as Favorites
-*Choose which file types you care about
-*Multi-monitor support - Move MPC from one screen to another
+* Responsive UI with support for portrait/landscape phones as well as tablets
+* File browser with the ability to add folders as Favorites
+* Choose which file types you care about
+* Multi-monitor support - Move MPC from one screen to another
 
 #### Screenshots
 Controls tab
