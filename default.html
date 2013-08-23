@@ -61,22 +61,22 @@
 						</li>
 						<div class="clearfix">
 							<li class="buttons">
-								<a href ng-click="Command(Commands.PrevFile);Msg('Previous File');">
-									<i class="icon-step-backward"></i>
+								<a href="" ng-click="Command(Commands.JumpBackMed);Msg('Nudge Back');">
+									<i class="icon-backward"></i>
 								</a>
 								<a href ng-click="PlayPause()">
 									<i ng-class="PlayPauseIcon()"></i>
 								</a>
-								<a href ng-click="Command(Commands.NextFile);Msg('Next File');">
-									<i class="icon-step-forward"></i>
+								<a href="" ng-click="Command(Commands.JumpFwdMed);Msg('Nudge Forward');">
+									<i class="icon-forward"></i>
 								</a>
 							</li>
 							<li class="buttons">
-								<a href="" ng-click="Command(Commands.JumpBackMed);Msg('Nudge Back');">
-									<i class="icon-backward"></i>
+								<a href ng-click="Command(Commands.PrevFile);Msg('Previous File');">
+									<i class="icon-step-backward"></i>
 								</a>
-								<a href="" ng-click="Command(Commands.JumpFwdMed);Msg('Nudge Forward');">
-									<i class="icon-forward"></i>
+								<a href ng-click="Command(Commands.NextFile);Msg('Next File');">
+									<i class="icon-step-forward"></i>
 								</a>
 								<a href ng-click="Command(Commands.Fullscreen);Msg('Fullscreen');">
 									<i class="icon-fullscreen"></i>
