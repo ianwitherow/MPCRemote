@@ -7,12 +7,15 @@ Features
 
 #### Screenshots
 Controls tab
+<br />
 ![alt text](http://i.imgur.com/HtgsgkJ.png "Controls tab - phone in portrait orientation")
 
 Browse tab
+<br />
 ![alt text](http://i.imgur.com/8LCp9Oy.png "File browser")
 
 Tablet layout
+<br />
 ![alt text](http://i.imgur.com/yxJ6ek0.png "Tablet layout")
 
 
