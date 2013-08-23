@@ -161,9 +161,16 @@ $(function()
 				$("#FileSearch").show().focus()
 				.animate({
 					width: '136px'
-				}, 100);
+				}, 100, function()
+				{
+					$("#ClearSearchButton").show();
+				});
 			}
-			});
+		});
+		$("#ClearSearchButton").click(function(e)
+		{
+			hideSearch();
+		});
 		$("#FileSearch").blur(function()
 		{
 			if ($(this).val() == '')
@@ -180,6 +187,7 @@ function hideSearch()
 	}, 100, function()
 	{
 		$(this).hide();
+		$("#ClearSearchButton").hide();
 		$(".footer #RightButtons").show();
 	});
 }

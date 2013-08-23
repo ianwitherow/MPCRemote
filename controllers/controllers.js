@@ -30,9 +30,9 @@ app.controller('mpcController', function($scope, MpcFactory)
 		AudioDelayPlus: 905,
 		NextFile: 922,
 		PrevFile: 919,
-		NextSubtitle: 953,
-		PrevSubtitle: 954,
-		ToggleSubtitle: 955,
+		NextSubtitle: 954,
+		PrevSubtitle: 955,
+		ToggleSubtitles: 956,
 		VidFrmNormal: 836,
 		VidFrmStretch: 838,
 		VidFrmInside: 839,
@@ -80,9 +80,12 @@ app.controller('mpcController', function($scope, MpcFactory)
 		{
 			$scope.GetFileList();
 		}
-
 	}
 
+	$scope.ClearSearch = function()
+	{
+		$scope.FileSearch = '';
+	}
 
 
 
