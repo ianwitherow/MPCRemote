@@ -1,3 +1,21 @@
+Features
+========
+*Responsive UI with support for portrait/landscape phones as well as tablets
+*File browser with the ability to add folders as Favorites
+*Choose which file types you care about
+*Multi-monitor support - Move MPC from one screen to another
+
+#### Screenshots
+Controls tab
+![alt text](http://i.imgur.com/HtgsgkJ.png "Controls tab - phone in portrait orientation")
+
+Browse tab
+![alt text](http://i.imgur.com/8LCp9Oy.png "File browser")
+
+Tablet layout
+![alt text](http://i.imgur.com/yxJ6ek0.png "Tablet layout")
+
+
 Installation
 ============
 
