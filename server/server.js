@@ -1,4 +1,3 @@
-/* Settings */
 var debug = true;
 
 /* Dependencies */
@@ -185,12 +184,13 @@ mpcServer.listen(settings.serverPort);
 function serverError(e, port)
 {
 	if (e.code == 'EADDRINUSE')
+	{
 		console.log('Failed to start server. Port ' + port + ' is already in use.');
 		setTimeout(function()
 		{
 			//Give user time to read message
 		}, 5000);
-
+	}
 }
 
 
@@ -213,100 +213,107 @@ function OnStatus(FileName, Status, CurrentFrame, CurrentTime, TotalFrames, Tota
 
 }
 
-var mpc = {};
-mpc.player = {
-	open: function(filePath)
-	{
-		SendRequest(settings.mpcUrl + '/browser.html?path=' + escape(filePath));
-	},
-	sendCommand: function(command)
-	{
-		SendRequest(settings.mpcUrl + '/command.html?wm_command=' + command);
-	},
-	getStatus: function(callback)
-	{
-		SendRequest(settings.mpcUrl + '/status.html', function(error, response, body)
+var mpc = {
+	player : {
+		open: function(filePath)
 		{
-			//Escape backslashes
-			if (body)
-			{
-				var data = body.replace(/\\/g, '\\\\');
-				var status = eval(data);
-				callback(status);
-			} else
-			{
-				callback({data:null});
-			}
-
-		});
-	},
-	goTo: function(time)
-	{
-		SendRequest(settings.mpcUrl + '/command.html?wm_command=-1&position=' + time);
-	},
-	setVolume: function(volume)
-	{
-		SendRequest(settings.mpcUrl + '/command.html?wm_command=-2&volume=' + volume);
-	}
-
-}
-var browser = {};
-browser.getList = function(dir, types, callback)
-{
-	//TODO: Accept sort and do sorting
-	//Add more metadata to returned list so we can see file size, date modified, maybe even duration
-	dir = unescape(dir);
-	if (dir == '/')
-	{
-		callback(DriveLetters());
-	}
-	else
-	{
-		//request.get(mpcUrl + '/browser.html?path=' + dir);
-		fs.readdir(dir, function(err, files)
+			SendRequest(settings.mpcUrl + '/browser.html?path=' + escape(filePath));
+		},
+		sendCommand: function(command)
 		{
-			var contents = [];
-			if (files)
+			SendRequest(settings.mpcUrl + '/command.html?wm_command=' + command);
+		},
+		getStatus: function(callback)
+		{
+			var success = false;
+			setTimeout(function()
 			{
-				types = types.split(',');
-				for (var i = 0; i < files.length; i++)
+				if (!success)
+					callback({data:null});
+			}, 1000)
+			SendRequest(settings.mpcUrl + '/status.html', function(error, response, body)
+			{
+				//Escape backslashes
+				if (body)
 				{
-					try
+					var data = body.replace(/\\/g, '\\\\');
+					var status = eval(data);
+					callback(status);
+				} else
+				{
+					callback({data:null});
+				}
+				success = true;
+			});
+		},
+		goTo: function(time)
+		{
+			SendRequest(settings.mpcUrl + '/command.html?wm_command=-1&position=' + time);
+		},
+		setVolume: function(volume)
+		{
+			SendRequest(settings.mpcUrl + '/command.html?wm_command=-2&volume=' + volume);
+		}
+	}
+};
+var browser = {
+	getList: function(dir, types, callback)
+	{
+		//TODO: Accept sort and do sorting
+		//Add more metadata to returned list so we can see file size, date modified, maybe even duration
+		dir = unescape(dir);
+		if (dir == '/')
+		{
+			callback(DriveLetters());
+		}
+		else
+		{
+			//request.get(mpcUrl + '/browser.html?path=' + dir);
+			fs.readdir(dir, function(err, files)
+			{
+				var contents = [];
+				if (files)
+				{
+					types = types.split(',');
+					for (var i = 0; i < files.length; i++)
 					{
-						var stats = fs.statSync(path.join(dir, files[i]))
-						if (stats.isDirectory())
+						try
 						{
-							contents.push({
-								name: files[i],
-								type: 'directory',
-								modified: stats.mtime
-							});
-						} else
-						{
-							var ext = files[i].substring(files[i].lastIndexOf('.') + 1, files[i].length);
-							if (types.contains(ext))
+							var stats = fs.statSync(path.join(dir, files[i]))
+							if (stats.isDirectory())
 							{
 								contents.push({
 									name: files[i],
-									type: 'file',
-									ext: ext,
+									type: 'directory',
 									modified: stats.mtime
 								});
+							} else
+							{
+								var ext = files[i].substring(files[i].lastIndexOf('.') + 1, files[i].length);
+								if (types.contains(ext))
+								{
+									contents.push({
+										name: files[i],
+										type: 'file',
+										ext: ext,
+										modified: stats.mtime
+									});
+								}
 							}
+						} catch(exception)
+						{
 						}
-					} catch(exception)
-					{
 					}
+					callback(contents);
+				} else
+				{
+					callback();
 				}
-				callback(contents);
-			} else
-			{
-				callback();
-			}
-		});
-	}
+			});
+		}
 
-}
+	}
+};
 Array.prototype.contains = function(value)
 {
 	for (var i = 0; i < this.length; i++)
@@ -329,9 +336,20 @@ function SendRequest(url, callback)
 		{
 			req = request.get(url);
 		}
-
+		req.on('socket', function (socket)
+		{
+			console.log("Setting timeout");
+			socket.setTimeout(500);  
+			socket.on('timeout', function()
+			{
+				console.log("Timeout!");
+				req.abort();
+			});
+		});
 		req.on('error', function()
 		{
+			console.log("Error!");
+			callback({data:null});
 			//MPC isn't running
 		});
 
