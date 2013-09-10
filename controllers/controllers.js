@@ -136,12 +136,21 @@ app.controller('mpcController', function($scope, MpcFactory)
 		});
 	}
 
+	var prevTime = -1;
 	$scope.setTime = function(time)
 	{
+		if (time == prevTime)
+			return;
+		prevTime = time;
 		MpcFactory.controls.SkipTo(time);
 	}
+
+	var previousVolume = -1;
 	$scope.setVolume = function(volume)
 	{
+		if (volume == previousVolume)
+			return;
+		previousVolume = volume;
 		MpcFactory.controls.Volume.Set(volume);
 	}
 	$scope.NudgeVolume = function(which)

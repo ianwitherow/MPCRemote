@@ -11,7 +11,6 @@ var sliding = false,
 	tabletBrowseScroll = 0,
 	updateInterval,
 	slidingValue,
-	seekChanged = false,
 	scope;
 $(function()
 {
@@ -57,14 +56,9 @@ $(function()
 		},
 		slide: function(event, ui)
 		{
-			$(ui.handle).css("left", 5);
-			var time = secondsToTime(ui.value);
-			seekChanged = (slidingValue != ui.value);
 			slidingValue = ui.value;
-			scope.$apply(function()
-			{
-				scope.Status.currentTime = time.toString();
-			});
+			var time = secondsToTime(ui.value);
+			$("#CurrentTime").html(time.toString());
 		}
 	});
 	$('#VolumeSlider').slider({
@@ -95,6 +89,7 @@ $(function()
 			{
 				scope.$apply(function()
 				{
+					scope.Status.volume = ui.value;
 					scope.setVolume(ui.value);
 				});
 			}
@@ -102,10 +97,11 @@ $(function()
 		slide: function(event, ui)
 		{
 			slidingValue = ui.value;
-			scope.$apply(function()
-			{
-				scope.Status.volume = ui.value;
-			});
+			$("#CurrentVolume").html(ui.value);
+			//scope.$apply(function()
+			//{
+				//scope.Status.volume = ui.value;
+			//});
 		}
 	});
 	setTimeout(function()
