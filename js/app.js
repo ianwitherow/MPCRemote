@@ -97,11 +97,11 @@ $(function()
 		slide: function(event, ui)
 		{
 			slidingValue = ui.value;
-			$("#CurrentVolume").html(ui.value);
-			//scope.$apply(function()
-			//{
-				//scope.Status.volume = ui.value;
-			//});
+			//$("#CurrentVolume").html(ui.value);
+			scope.$apply(function()
+			{
+				scope.Status.volume = ui.value;
+			});
 		}
 	});
 	setTimeout(function()
